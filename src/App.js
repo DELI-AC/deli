@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route,BrowserRouter } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
 import Home from "./pages/Home"; // Create these components
 // import About from './About';     // Create these components
@@ -14,7 +14,7 @@ import Camera from "./pages/camera";
 function App() {
   return (
     <ChakraProvider>
-      <Router>
+      <BrowserRouter basename="/deli">
         {/* <Navbar /> */}
         <Routes>
           <Route path="/" element={<Home />} />
@@ -25,7 +25,7 @@ function App() {
           <Route path="/order" element={<Order />} />
           <Route path="/camera" element={<Camera />} />
         </Routes>
-      </Router>
+      </BrowserRouter>
     </ChakraProvider>
   );
 }

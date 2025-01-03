@@ -1,7 +1,7 @@
 {
   "name": "deli",
   "version": "0.1.0",
-  "homepage": "https://DELI-AC.github.io/deli",
+  "homepage": "https://deli-ac.github.io/deli/",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^2.2.4",

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Flex } from "@chakra-ui/react";
 import QrScanner from "react-qr-scanner";
+import { ArrowBackIcon, ChevronLeftIcon } from "@chakra-ui/icons";
+import { Link } from "react-router-dom";
 
 export default function QRCodeScanner() {
   const [data, setData] = useState("No result");
@@ -19,6 +21,12 @@ export default function QRCodeScanner() {
 
   return (
     <Box justify="center" align="center" maxW="800px">
+      <Flex w="40px" borderRadius="50%" mt="1.5rem"   h="40px" bg="gray.50"  alignItems="center" justifyContent="center">
+        <Link to="/dashboard">
+        <ChevronLeftIcon/>
+
+        </Link>
+      </Flex>
       {/* Show the QR Scanner */}
       <Box
         border="1px solid #ccc"

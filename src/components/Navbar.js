@@ -1,10 +1,16 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Box, Flex, Link, IconButton, Stack } from '@chakra-ui/react';
-import { FiMenu, FiX } from 'react-icons/fi';
+import React, { useState } from "react";
+import {
+  Box,
+  Flex,
+  Link as ChakraLink,
+  IconButton,
+  Stack,
+} from "@chakra-ui/react";
+import { Link as RouterLink } from "react-router-dom";
+import { FiMenu, FiX } from "react-icons/fi";
 import logo from "../images/deli_1_-removebg-preview.png";
-
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,62 +20,100 @@ export default function Navbar() {
   };
 
   return (
-    <Box bg="Orange"  boxShadow="md" px={8} /* Adicionando mais padding lateral */>
+    <Box bg="Orange" boxShadow="md" px={8}>
       <Flex h={16} alignItems="center" justifyContent="space-between">
-        <Link href="/" ml="50px" >
-          <img src={logo} alt="Logo" style={{ width: '60px', height: '60px' }} />
-        </Link>
+        <ChakraLink as={RouterLink} to="/" ml="50px">
+          <img
+            src={logo}
+            alt="Logo"
+            style={{ width: "60px", height: "60px" }}
+          />
+        </ChakraLink>
         <IconButton
           size="md"
           bg={"orange"}
-          _hover={{ color: 'blue.500' }}
+          _hover={{ color: "blue.500" }}
           icon={isOpen ? <FiX /> : <FiMenu />}
           aria-label="Toggle menu"
-          display={{ md: 'none' }}
+          display={{ md: "none" }}
           onClick={toggleMenu}
         />
-        <Flex display={{ base: 'none', md: 'flex' }}  ml={10} mr={"190px"} /* Ajustando os links mais para dentro */>
-          <Stack direction="row"  spacing={6} /* Ajustando o espaçamento entre os links */>
-            <Link href="/" color="gray.800" _hover={{ color: 'blue.500' }}>
+        <Flex display={{ base: "none", md: "flex" }} ml={10} mr={"190px"}>
+          <Stack direction="row" spacing={6}>
+            <ChakraLink
+              as={RouterLink}
+              to="/"
+              color="gray.800"
+              _hover={{ color: "blue.500" }}
+            >
               Home
-            </Link>
-            <Link href="/about" color="gray.800" _hover={{ color: 'blue.500' }}>
+            </ChakraLink>
+            <ChakraLink
+              as={RouterLink}
+              to="/about"
+              color="gray.800"
+              _hover={{ color: "blue.500" }}
+            >
               About
-            </Link>
-
-            <Link href="/contact" color="gray.800" _hover={{ color: 'blue.500' }}>
+            </ChakraLink>
+            <ChakraLink
+              as={RouterLink}
+              to="/contact"
+              color="gray.800"
+              _hover={{ color: "blue.500" }}
+            >
               Contact
-            </Link>
-            <Link href="/login" color="gray.800" _hover={{ color: 'blue.500' }}>
+            </ChakraLink>
+            <ChakraLink
+              as={RouterLink}
+              to="/login"
+              color="gray.800"
+              _hover={{ color: "blue.500" }}
+            >
               Login
-            </Link>
+            </ChakraLink>
           </Stack>
         </Flex>
       </Flex>
 
       {isOpen && (
-        <Box pb={4} display={{ md: 'none' }}>
+        <Box pb={4} display={{ md: "none" }}>
           <Stack as="nav" spacing={4}>
-            <Link href="/" color="gray.800" _hover={{ color: 'blue.500' }}>
+            <ChakraLink
+              as={RouterLink}
+              to="/"
+              color="gray.800"
+              _hover={{ color: "blue.500" }}
+            >
               Home
-            </Link>
-            <Link href="/" color="gray.800" _hover={{ color: 'blue.500' }}>
+            </ChakraLink>
+            <ChakraLink
+              as={RouterLink}
+              to="/about"
+              color="gray.800"
+              _hover={{ color: "blue.500" }}
+            >
               About
-            </Link>
-
-            <Link href="/Contact" color="gray.800" _hover={{ color: 'blue.500' }}>
+            </ChakraLink>
+            <ChakraLink
+              as={RouterLink}
+              to="/contact"
+              color="gray.800"
+              _hover={{ color: "blue.500" }}
+            >
               Contact
-            </Link>
-
-            <Link href="/login" color="gray.800" _hover={{ color: 'blue.500' }}>
+            </ChakraLink>
+            <ChakraLink
+              as={RouterLink}
+              to="/login"
+              color="gray.800"
+              _hover={{ color: "blue.500" }}
+            >
               Login
-            </Link>
+            </ChakraLink>
           </Stack>
-
-          
         </Box>
       )}
     </Box>
   );
 }
-

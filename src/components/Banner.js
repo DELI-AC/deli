@@ -122,7 +122,7 @@ export default function Banner() {
               fontSize={{ base: "sm", sm: "md" }}
               display="inline-block"
             >
-              Course
+              Menu
             </ChakraLink>
           </Flex>
         </Box>

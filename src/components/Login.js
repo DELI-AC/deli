@@ -1,24 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, Input, InputGroup, InputRightElement, Text, Heading, useToast, IconButton, Link, Spinner, HStack } from "@chakra-ui/react";
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Text,
+  Heading,
+  useToast,
+  IconButton,
+  Link,
+  Spinner,
+  HStack,
+} from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider, getRedirectResult } from "firebase/auth";
-import firebaseConfig from "../config/FirebaseConfig";
-import { initializeApp } from "firebase/app";
-import { SiGoogle, SiApple } from "react-icons/si";
-
-// Inicializa o Firebase
-const app = initializeApp(firebaseConfig);
+import axios from "axios";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
-  const auth = getAuth(app);
-  const googleProvider = new GoogleAuthProvider(); // Inicializa o provedor do Google
 
   const toggleShowPassword = () => setShowPassword(!showPassword);
 
@@ -34,10 +39,16 @@ const LoginPage = () => {
       return;
     }
 
-    setLoading(true); 
+    setLoading(true);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/login",
+        {
+          email,
+          password,
+        },
+      );
       toast({
         title: "Login realizado!",
         description: "Você está agora logado.",
@@ -45,11 +56,12 @@ const LoginPage = () => {
         duration: 5000,
         isClosable: true,
       });
+      localStorage.setItem("token", response.data.token); // Armazena o token JWT
       navigate("/home");
     } catch (error) {
       toast({
         title: "Erro ao fazer login",
-        description: error.message,
+        description: error.response?.data?.message || "Algo deu errado.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -58,66 +70,28 @@ const LoginPage = () => {
       setLoading(false);
     }
   };
-
-  // Função para login com Google
-  const handleGoogleLogin = async () => {
-    setLoading(true);
-    try {
-      await signInWithRedirect(auth, googleProvider); // Redireciona para login do Google
-    } catch (error) {
-      toast({
-        title: "Erro ao fazer login com Google",
-        description: error.message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Função para lidar com o resultado do redirecionamento
-  useEffect(() => {
-    const fetchRedirectResult = async () => {
-      const result = await getRedirectResult(auth);
-      if (result) {
-        // O usuário foi autenticado com sucesso
-        toast({
-          title: "Login com Google realizado!",
-          description: "Você está agora logado.",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
-        navigate("/home");
-      }
-    };
-    fetchRedirectResult();
-  }, [auth, navigate, toast]);
 
   return (
-    <Box 
-      maxW="md" 
-      mx="auto" 
-      mt="8" 
-      p="6" 
+    <Box
+      maxW="md"
+      mx="auto"
+      mt="8"
+      p="6"
       boxShadow="lg"
       borderRadius={"20px"}
       bgGradient="linear(to-br, blue.800, blue.600)"
-      bg="blue.900 0.5" // Fundo azul oceano
-      color="Black" // Texto branco para contraste
+      color="Black"
     >
-      <Heading mb={6} textAlign="center">Login</Heading>
+      <Heading mb={6} textAlign="center">
+        Login
+      </Heading>
       <Input
         placeholder="Email"
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         mb={3}
-        border="1px solid grey" // Borda branca
-        bg="blue.800" // Fundo do input mais escuro
-        color="white"
+        border="1px solid grey"
       />
       <InputGroup mb={3}>
         <Input
@@ -126,8 +100,6 @@ const LoginPage = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           border="1px solid grey"
-          bg="blue.800"
-          color="white"
         />
         <InputRightElement width="4.5rem">
           <IconButton
@@ -135,38 +107,18 @@ const LoginPage = () => {
             icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
             onClick={toggleShowPassword}
             variant="unstyled"
-            color="white" // Ícone branco
           />
         </InputRightElement>
       </InputGroup>
       <Button
-        bg="#FF7622" // Botão teal (azul esverdeado)
+        bg="teal.500"
         color="white"
-        borderRadius={"20px"}
-        width="100px"
-        _hover={{ bg: "teal.600" }}
+        width="100%"
         onClick={handleLogin}
         isLoading={loading}
       >
         {loading ? <Spinner size="sm" /> : "Login"}
       </Button>
-      {/* Ícones de login com Google e Apple */}
-      <HStack spacing={4} mt={4} justify="center">
-        <IconButton
-          aria-label="Registrar com Google"
-          icon={<SiGoogle color="#DB4437" />} // Ícone do Google
-          onClick={handleGoogleLogin} // Chama a função de login com Google
-          size="lg"
-          border={"1px solid white"} // Estilo de botão de contorno
-        />
-        <IconButton
-          aria-label="Registrar com Apple"
-          icon={<SiApple color="#000000" />} // Ícone da Apple
-          onClick={() => {/* Aqui você pode implementar a função de login com Apple */}}
-          size="lg"
-          border={"1px solid white"}
-        />
-      </HStack>
       <Text mt={4} textAlign="center">
         Não tem uma conta?{" "}
         <Link as={RouterLink} to="/register" color="teal.200">

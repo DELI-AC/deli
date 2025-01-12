@@ -5,12 +5,13 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Text,
   Heading,
   IconButton,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
@@ -18,24 +19,43 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const toast = useToast();
+  const navigate = useNavigate();
+
   const toggleShowPassword = () => setShowPassword(!showPassword);
 
   const handleRegister = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/register",
-        {
-          name,
-          email,
-          password,
-        },
-      );
-      alert(response.data.message); // Exibe a mensagem de resposta do servidor
+      const response = await axios.post("http://localhost:8080/auth/register", {
+        name,
+        email,
+        password,
+      });
+
+      // Exibe o toast de sucesso
+      toast({
+        title: "Registro realizado com sucesso!",
+        description: "Agora você pode fazer login.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+
+      // Redireciona para a página de login
+      navigate("/login");
     } catch (error) {
-      alert(
-        "Erro ao registrar: " +
-        (error.response?.data?.message || error.message),
-      );
+      const errorMessage =
+        error.response?.data || "Erro desconheciudo ao registrar";
+      // Exibe o toast de erro
+      toast({
+        title: "Erro ao registrar!",
+        description:
+          error.response?.data?.message ||
+          "Ocorreu um erro durante o registro.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 

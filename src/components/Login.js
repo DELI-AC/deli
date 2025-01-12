@@ -42,13 +42,10 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:8080/api/auth/login",
-        {
-          email,
-          password,
-        },
-      );
+      const response = await axios.post("http://localhost:8080/auth/login", {
+        email,
+        password,
+      });
       toast({
         title: "Login realizado!",
         description: "Você está agora logado.",

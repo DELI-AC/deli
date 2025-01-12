@@ -32,30 +32,34 @@ const RegisterPage = () => {
         password,
       });
 
-      // Exibe o toast de sucesso
       toast({
-        title: "Registro realizado com sucesso!",
-        description: "Agora você pode fazer login.",
+        title: "Registration Successful!",
+        description: "You can now log in with your credentials.",
         status: "success",
         duration: 5000,
         isClosable: true,
       });
 
-      // Redireciona para a página de login
       navigate("/login");
     } catch (error) {
-      const errorMessage =
-        error.response?.data || "Erro desconheciudo ao registrar";
-      // Exibe o toast de erro
-      toast({
-        title: "Erro ao registrar!",
-        description:
-          error.response?.data?.message ||
-          "Ocorreu um erro durante o registro.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
+      if (error.response?.status === 409) {
+        // Specific handling for user already exists
+        toast({
+          title: "User Already Exists!",
+          description: "An account with this email already exists.",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "Registration Failed!",
+          description: error.response?.data || "An unknown error occurred.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
     }
   };
 
@@ -71,10 +75,10 @@ const RegisterPage = () => {
       color="white"
     >
       <Heading mb={6} textAlign="center">
-        Registrar
+        Register
       </Heading>
       <Input
-        placeholder="Nome"
+        placeholder="Name"
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
@@ -95,7 +99,7 @@ const RegisterPage = () => {
       />
       <InputGroup mb={3}>
         <Input
-          placeholder="Senha"
+          placeholder="Password"
           type={showPassword ? "text" : "password"}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -105,7 +109,7 @@ const RegisterPage = () => {
         />
         <InputRightElement width="4.5rem">
           <IconButton
-            aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+            aria-label={showPassword ? "Hide Password" : "Show Password"}
             icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
             onClick={toggleShowPassword}
             variant="unstyled"
@@ -121,7 +125,7 @@ const RegisterPage = () => {
         _hover={{ bg: "orange.600" }}
         onClick={handleRegister}
       >
-        Registrar
+        Register
       </Button>
     </Box>
   );

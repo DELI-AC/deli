@@ -54,7 +54,7 @@ const LoginPage = () => {
         isClosable: true,
       });
       localStorage.setItem("token", response.data.token); // Armazena o token JWT
-      navigate("/home");
+      navigate("/dasboard");
     } catch (error) {
       toast({
         title: "Erro ao fazer login",
